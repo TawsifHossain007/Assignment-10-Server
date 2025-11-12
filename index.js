@@ -40,6 +40,12 @@ async function run() {
       res.send(result)
     })
 
+    app.get('/movies/latest',async (req,res)=>{
+      const cursor = MovieCollection.find()
+      const result = await cursor.sort({_id:-1}).limit(6).toArray()
+      res.send(result)
+    })
+
     app.get('/movies/:id',async (req,res)=>{
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
