@@ -48,6 +48,18 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/movies/user", async (req, res) => {
+      const email = req.query.email;
+      if (!email) {
+        return res.status(400).send({ message: "Email is required" });
+      }
+
+      const query = { addedBy: email };
+      const cursor = MovieCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     app.get("/movies/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -57,13 +69,10 @@ async function run() {
 
     app.patch("/movies/:id", async (req, res) => {
       const id = req.params.id;
-      const updatedProduct = req.body;
+      const updatedMovie = req.body;
+      const {_id,...rest} = updatedMovie
       const query = { _id: new ObjectId(id) };
-      const update = {
-        $set: {
-          name: updatedProduct.name,
-        },
-      };
+      const update = { $set:rest }; 
       const result = await MovieCollection.updateOne(query, update);
       res.send(result);
     });
