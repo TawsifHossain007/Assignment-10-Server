@@ -70,9 +70,9 @@ async function run() {
     app.patch("/movies/:id", async (req, res) => {
       const id = req.params.id;
       const updatedMovie = req.body;
-      const {_id,...rest} = updatedMovie
+      const { _id, ...rest } = updatedMovie;
       const query = { _id: new ObjectId(id) };
-      const update = { $set:rest }; 
+      const update = { $set: rest };
       const result = await MovieCollection.updateOne(query, update);
       res.send(result);
     });
